@@ -4,20 +4,12 @@ import GUI from 'lil-gui'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js'
 
-import doorColor from './assets/textures/door/color.jpg'
-import doorAlpha from './assets/textures/door/alpha.jpg'
-import doorAmbientOcclusion from './assets/textures/door/ambientOcclusion.jpg'
-import doorHeight from './assets/textures/door/height.jpg'
-import doorNormal from './assets/textures/door/normal.jpg'
-import doorMetalness from './assets/textures/door/metalness.jpg'
-import doorRoughness from './assets/textures/door/roughness.jpg'
-import mathcaps from './assets/textures/matcaps/8.png'
-import gradient from './assets/textures/gradients/3.jpg'
-import hdr from './assets/textures/environmentMap/2k.hdr'
-
 console.log(HDRLoader)
 
-// Debug UI
+/**
+ * Base
+ */
+// Debug
 const gui = new GUI()
 
 // Canvas
@@ -26,23 +18,27 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-// Textures
+/**
+ * Textures
+ */
 const textureLoader = new THREE.TextureLoader()
 
-const doorColorTexture = textureLoader.load(doorColor)
-const doorAlphaTexture = textureLoader.load(doorAlpha)
-const doorAmbientOcclusionTexture = textureLoader.load(doorAmbientOcclusion)
-const doorHeightTexture = textureLoader.load(doorHeight)
-const doorNormalTexture = textureLoader.load(doorNormal)
-const doorMetalnessTexture = textureLoader.load(doorMetalness)
-const doorRoughnessTexture = textureLoader.load(doorRoughness)
-const matcapsTexture = textureLoader.load(mathcaps)
-const gradientTexture = textureLoader.load(gradient)
+const doorColorTexture = textureLoader.load('/textures/door/color.jpg')
+const doorAlphaTexture = textureLoader.load('/textures/door/alpha.jpg')
+const doorAmbientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg')
+const doorHeightTexture = textureLoader.load('/textures/door/height.jpg')
+const doorNormalTexture = textureLoader.load('/textures/door/normal.jpg')
+const doorMetalnessTexture = textureLoader.load('/textures/door/metalness.jpg')
+const doorRoughnessTexture = textureLoader.load('/textures/door/roughness.jpg')
+const matcapsTexture = textureLoader.load('/textures/matcaps/8.png')
+const gradientTexture = textureLoader.load('/textures/gradients/3.jpg')
 
 doorColorTexture.colorSpace = THREE.SRGBColorSpace
 matcapsTexture.colorSpace = THREE.SRGBColorSpace
 
-// Object
+/**
+ * Materials
+ */
 // MeshBasicMaterial
 // const material = new THREE.MeshBasicMaterial()
 // material.map = doorColorTexture
@@ -60,9 +56,9 @@ matcapsTexture.colorSpace = THREE.SRGBColorSpace
 
 // MeshMatcapMaterial
 // const material = new THREE.MeshMatcapMaterial()
-// material.matcap = matcapsTexture 
+// material.matcap = matcapsTexture
 
-// MashDepthMaterial
+// MeshDepthMaterial
 // const material = new THREE.MeshDepthMaterial()
 
 // MeshLambertMaterial
@@ -126,7 +122,7 @@ gui.add(material, 'roughness').min(0).max(1).step(0.001)
 // gui.add(material, 'clearcoat').min(0).max(1).step(0.01)
 // gui.add(material, 'clearcoatRoughness').min(0).max(1).step(0.01)
 
-//Shen
+// Sheen
 // material.sheen = 1
 // material.sheenRoughness = 0.25
 // material.sheenColor.set(1, 1, 1)
@@ -154,8 +150,11 @@ gui.add(material, 'transmission').min(0).max(1).step(0.001)
 gui.add(material, 'ior').min(1).max(10).step(0.001)
 gui.add(material, 'thickness').min(0).max(1).step(0.001)
 
+/**
+ * Objects
+ */
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 64,64), 
+    new THREE.SphereGeometry(0.5, 64,64),
     material
 )
 
@@ -175,7 +174,9 @@ torus.position.x = 1.5
 
 scene.add(sphere, plane, torus) // add the objects in the scene
 
-// Lights
+/**
+ * Lights
+ */
 // const ambientLight = new THREE.AmbientLight('white', 1)
 
 // const pointLight = new THREE.PointLight('purple', 30)
@@ -185,9 +186,11 @@ scene.add(sphere, plane, torus) // add the objects in the scene
 
 // scene.add(ambientLight, pointLight) // add the lights in the scene
 
-// Enviroment map
+/**
+ * Environment map
+ */
 const hdrLoader = new HDRLoader()
-hdrLoader.load(hdr, (environmentMap) => {
+hdrLoader.load('/textures/environmentMap/2k.hdr', (environmentMap) => {
     // console.log(enviromentMap)
     environmentMap.mapping = THREE.EquirectangularReflectionMapping
 
@@ -195,7 +198,9 @@ hdrLoader.load(hdr, (environmentMap) => {
     scene.environment = environmentMap
 })
 
-// Sizes
+/**
+ * Sizes
+ */
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -210,12 +215,15 @@ window.addEventListener('resize', () => {
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
 
-    // Update renderer 
+    // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-// Camera
+/**
+ * Camera
+ */
+// Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 1
 camera.position.y = 1
@@ -227,14 +235,18 @@ scene.add(camera) // add the camera in the scene
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
-// Renderer
+/**
+ * Renderer
+ */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-// Clock
+/**
+ * Animate
+ */
 const clock = new THREE.Clock()
 
 const tick = () =>

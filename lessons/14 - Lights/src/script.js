@@ -7,6 +7,9 @@ import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js
 
 RectAreaLightUniformsLib.init() // required, otherwise RectAreaLight emits nothing
 
+/**
+ * Base
+ */
 // Debug
 const gui = new GUI({title: 'Lights', closeFolders: true})
 
@@ -18,8 +21,9 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-// Lights
-
+/**
+ * Lights
+ */
 // Ambient light - lights every face equally, from all sides. No direction, no shadows
 global.ambientColor = '#6600ff'
 
@@ -137,7 +141,9 @@ const rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight)
 scene.add(hemisphereLightHelper, directionalLightHelper, pointLightHelper, spotLightHelper) // add the light helpers in the scene
 rectAreaLight.add(rectAreaLightHelper) // this one is the exception: it has to be a child of its own light
 
-// Object
+/**
+ * Objects
+ */
 const material = new THREE.MeshStandardMaterial()
 material.roughness = 0.4
 
@@ -167,7 +173,9 @@ plane.position.y = - 0.65
 
 scene.add(sphere, cube, torus, plane) // add the objects in the scene
 
-// Sizes
+/**
+ * Sizes
+ */
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -187,8 +195,10 @@ window.addEventListener('resize', () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-
-// Camera
+/**
+ * Camera
+ */
+// Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 1
 camera.position.y = 1
@@ -200,17 +210,20 @@ scene.add(camera) // add the camera in the scene
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
-// Renderer
+/**
+ * Renderer
+ */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-// Clock
+/**
+ * Animate
+ */
 const clock = new THREE.Clock()
 
-// Animations 
 const tick = () => {
     // Clock
     const elapsedTime = clock.getElapsedTime()

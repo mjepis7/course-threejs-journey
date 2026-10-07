@@ -5,10 +5,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { FontLoader } from 'three/addons/loaders/FontLoader.js'
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js'
 
-import fontHelvetiker from './assets/fonts/helvetiker_regular.typeface.json?url'
-import textMatcap from './assets/textures/matcaps/4.png'
-import donutMatcap from './assets/textures/matcaps/8.png'
-
+/**
+ * Base
+ */
 // Debug
 const gui = new GUI()
 
@@ -18,21 +17,26 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-// Axios helper
+// Axes helper
 // const axesHelper = new THREE.AxesHelper()
 
-// scene.add(axesHelper) // add the axios in the scene
+// scene.add(axesHelper) // add the axes in the scene
 
-// Textures
+/**
+ * Textures
+ */
 const textureLoader = new THREE.TextureLoader()
-const textMatcapTexture = textureLoader.load(textMatcap)
-const donutMatcapTexture = textureLoader.load(donutMatcap)
+const textMatcapTexture = textureLoader.load('/textures/matcaps/4.png')
+const donutMatcapTexture = textureLoader.load('/textures/matcaps/8.png')
 textMatcapTexture.colorSpace = THREE.SRGBColorSpace
 donutMatcapTexture.colorSpace = THREE.SRGBColorSpace
 
-// Fonts
+/**
+ * Fonts
+ */
 const fontLoader = new FontLoader()
-fontLoader.load(fontHelvetiker, (font) => {
+fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
+    // Text
     const textGeometry = new TextGeometry(
         'Hello Three.js',
         {
@@ -63,8 +67,9 @@ fontLoader.load(fontHelvetiker, (font) => {
     // textMaterial.wireframe = true
     const text = new THREE.Mesh(textGeometry, textMaterial)
 
-    scene.add(text) // add the text object in the scene 
+    scene.add(text) // add the text object in the scene
 
+    // Donuts
     console.time('donuts')
 
     const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45)
@@ -73,7 +78,7 @@ fontLoader.load(fontHelvetiker, (font) => {
 
     for (let i = 0; i < 100; i++) {
         const donut = new THREE.Mesh(donutGeometry, donutMaterial)
-        
+
         donut.position.x = (Math.random() - 0.5) * 10
         donut.position.y = (Math.random() - 0.5) * 10
         donut.position.z = (Math.random() - 0.5) * 10
@@ -83,14 +88,16 @@ fontLoader.load(fontHelvetiker, (font) => {
 
         const scale = Math.random()
         donut.scale.set(scale, scale, scale)
-        
-        scene.add(donut) // add the donut object in the scene 
+
+        scene.add(donut) // add the donut object in the scene
     }
 
     console.timeEnd('donuts')
 })
 
-// Sizes
+/**
+ * Sizes
+ */
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -105,12 +112,15 @@ window.addEventListener('resize', () => {
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
 
-    // Update renderer 
+    // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-// Camera
+/**
+ * Camera
+ */
+// Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 1
 camera.position.y = 1
@@ -118,21 +128,24 @@ camera.position.z = 2
 
 scene.add(camera) // add the camera in the scene
 
-// Controls 
+// Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
-// Renderer
+/**
+ * Renderer
+ */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-// Clock
+/**
+ * Animate
+ */
 const clock = new THREE.Clock()
 
-// Animations 
 const tick = () => {
     // Clock
     const elapsedTime = clock.getElapsedTime()

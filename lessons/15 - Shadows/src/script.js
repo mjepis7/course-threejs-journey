@@ -3,16 +3,18 @@ import GUI from 'lil-gui'
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
-import bakedShadow from './assets/textures/bakedShadow.jpg'
-import simpleShadow from './assets/textures/simpleShadow.jpg'
-
-// Textures
+/**
+ * Textures
+ */
 const textureLoader = new THREE.TextureLoader()
 
-const bakedShadowTexture = textureLoader.load(bakedShadow)
+const bakedShadowTexture = textureLoader.load('/textures/bakedShadow.jpg')
 bakedShadowTexture.colorSpace = THREE.SRGBColorSpace
-const simpleShadowTexture = textureLoader.load(simpleShadow)
+const simpleShadowTexture = textureLoader.load('/textures/simpleShadow.jpg')
 
+/**
+ * Base
+ */
 // Debug
 const gui = new GUI({title: 'Shadows', closeFolders: true})
 
@@ -22,21 +24,21 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-// Lights
-
-// Ambient light 
+/**
+ * Lights
+ */
+// Ambient light
 const ambientLight = new THREE.AmbientLight('#ffffff', 0.4)
 
 const ambientLightFolder = gui.addFolder('Ambient Light')
 ambientLightFolder.add(ambientLight, 'intensity').min(0).max(3).step(0.001)
 
-// Directional light 
+// Directional light
 const directionalLight = new THREE.DirectionalLight('#ffffff', 2.5)
 directionalLight.position.set(2, 2, - 1)
 directionalLight.castShadow = true
 
-// Shadow map size - the resolution of the texture the shadow is rendered into. Powers of two only
-directionalLight.shadow.mapSize.width = 1024
+directionalLight.shadow.mapSize.width = 1024 // shadow map size - the resolution of the texture the shadow is rendered into. Powers of two only
 directionalLight.shadow.mapSize.height = 1024
 
 // Shadow camera - the light renders the scene from its own point of view. Anything outside this box gets no shadow
@@ -60,8 +62,8 @@ const spotLight = new THREE.SpotLight('#ffffff', 3.6, 10, Math.PI * 0.3)
 spotLight.position.set(0, 2, 2)
 spotLight.castShadow = true
 
-spotLight.shadow.mapSize.width = 1024 
-spotLight.shadow.mapSize.height = 1024 
+spotLight.shadow.mapSize.width = 1024
+spotLight.shadow.mapSize.height = 1024
 
 spotLight.shadow.camera.near = 1
 spotLight.shadow.camera.far = 6
@@ -103,7 +105,10 @@ cameraHelperFolder.add(pointLightCameraHelper, 'visible').name('point light help
 
 scene.add(directionalLightCameraHelper, spotLightCameraHelper, pointLightCameraHelper) // add the light helpers in the scene
 
-// Objects
+/**
+ * Objects
+ */
+// Material
 const material = new THREE.MeshStandardMaterial()
 material.roughness = 0.7
 
@@ -111,6 +116,7 @@ const materialFolder = gui.addFolder('Material')
 materialFolder.add(material, 'metalness').min(0).max(1).step(0.001)
 materialFolder.add(material, 'roughness').min(0).max(1).step(0.001)
 
+// Meshes
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 32, 32),
     material
@@ -127,6 +133,7 @@ plane.receiveShadow = true // this one shows it
 
 scene.add(sphere, plane) // add the objects in the scene
 
+// Baked shadow
 const sphereShadow = new THREE.Mesh(
     new THREE.PlaneGeometry(1.5, 1.5),
     new THREE.MeshBasicMaterial({
@@ -140,7 +147,9 @@ sphereShadow.position.y = plane.position.y + 0.01
 
 scene.add(sphereShadow)
 
-// Sizes
+/**
+ * Sizes
+ */
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -160,7 +169,10 @@ window.addEventListener('resize', () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-// Camera
+/**
+ * Camera
+ */
+// Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 1
 camera.position.y = 1
@@ -172,7 +184,9 @@ scene.add(camera) // add the camera in the scene
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
-// Renderer
+/**
+ * Renderer
+ */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
@@ -182,17 +196,18 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = false // nothing casts a shadow until the renderer allows it
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
-// Clock
+/**
+ * Animate
+ */
 const clock = new THREE.Clock()
 
-// Animations
 const tick = () => {
     // Clock
     const elapsedTime = clock.getElapsedTime()
 
     // Update the sphere
     sphere.position.x = Math.cos(elapsedTime) * 1.5
-    sphere.position.y = Math.abs(Math.sin(elapsedTime * 2)) 
+    sphere.position.y = Math.abs(Math.sin(elapsedTime * 2))
     sphere.position.z = Math.sin(elapsedTime) * 1.5
 
     // Update the shadow

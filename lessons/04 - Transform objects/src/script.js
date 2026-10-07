@@ -2,6 +2,9 @@ import * as THREE from 'three'
 
 // console.log(THREE)
 
+/**
+ * Base
+ */
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 // console.log(canvas)
@@ -9,7 +12,9 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-// Object
+/**
+ * Object
+ */
 // const geometry = new THREE.BoxGeometry(1, 1, 1)
 // const material = new THREE.MeshBasicMaterial({color: 'purple'})
 // const mesh = new THREE.Mesh(geometry, material)
@@ -26,7 +31,7 @@ const scene = new THREE.Scene()
 // // console.log(mesh.position.length()) // gives the distance between the position and the center of the scene
 // // console.log(mesh.position.normalize()) // makes the vector's length equal to 1
 
-// // Scale 
+// // Scale
 // mesh.scale.set(0.3, 0.9, 0.1)
 
 // // mesh.scale.x = 0.3
@@ -39,7 +44,9 @@ const scene = new THREE.Scene()
 // mesh.rotation.y = 5.14159
 // mesh.rotation.z = Math.PI * 0.25
 
-// Group
+/**
+ * Group
+ */
 const group = new THREE.Group()
 
 const cube_one = new THREE.Mesh(
@@ -69,17 +76,23 @@ group.rotation.x = 1
 
 scene.add(group) // add the group in the scene
 
-// Axes helper
+/**
+ * Axes helper
+ */
 const axesHelper = new THREE.AxesHelper(2)
 scene.add(axesHelper)
 
-// Sizes
+/**
+ * Sizes
+ */
 const sizes = {
     width: 800,
     height: 600
 }
 
-// Camera
+/**
+ * Camera
+ */
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
 camera.position.z = 3
 
@@ -89,7 +102,9 @@ scene.add(camera) // add the camera in the scene
 
 // camera.lookAt(mesh.position)
 
-// Renderer
+/**
+ * Renderer
+ */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })

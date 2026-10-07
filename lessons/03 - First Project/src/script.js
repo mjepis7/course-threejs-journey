@@ -2,6 +2,9 @@ import * as THREE from 'three'
 
 // console.log(THREE)
 
+/**
+ * Base
+ */
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 // console.log(canvas)
@@ -9,26 +12,34 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-// Object
+/**
+ * Object
+ */
 const geometry = new THREE.BoxGeometry(2, 2, 2)
 const material = new THREE.MeshBasicMaterial({color: 'purple', wireframe: true})
 const mesh = new THREE.Mesh(geometry, material)
 
 scene.add(mesh) // add the object in the scene
 
-// Sizes
+/**
+ * Sizes
+ */
 const sizes = {
     width: 800,
     height: 600
 }
 
-// Camera
+/**
+ * Camera
+ */
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
 camera.position.z = 3
 
 scene.add(camera) // add the camera in the scene
 
-// Renderer
+/**
+ * Renderer
+ */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })

@@ -1,13 +1,19 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
+/**
+ * Base
+ */
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
 
-// Object
+/**
+ * Object
+ */
+// Custom buffer geometry
 // const positionsArray = new Float32Array([
 //     0, 0, 0,
 //     0, 1, 0,
@@ -28,6 +34,7 @@ const scene = new THREE.Scene()
 // const geometry = new THREE.BufferGeometry()
 // geometry.setAttribute('position', positionsAttribute)
 
+// Built-in geometries
 // const geometry = new THREE.BoxGeometry(1, 1, 1, 7, 7, 7)
 const geometry = new THREE.SphereGeometry(1, 50, 25)
 const material = new THREE.MeshBasicMaterial({color: 'purple', wireframe: true})
@@ -35,7 +42,9 @@ const mesh = new THREE.Mesh(geometry, material)
 
 scene.add(mesh) // add the object in the scene
 
-// Sizes
+/**
+ * Sizes
+ */
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -50,12 +59,15 @@ window.addEventListener('resize', () => {
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
 
-    // Update renderer 
+    // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-// Camera
+/**
+ * Camera
+ */
+// Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.z = 3
 
@@ -65,14 +77,18 @@ scene.add(camera) // add the camera in the scene
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
-// Renderer
+/**
+ * Renderer
+ */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-// Clock
+/**
+ * Animate
+ */
 const clock = new THREE.Clock()
 
 const tick = () =>
